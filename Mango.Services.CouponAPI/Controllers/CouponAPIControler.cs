@@ -1,4 +1,5 @@
-﻿using Mango.Services.CouponAPI.Data;
+﻿using AutoMapper;
+using Mango.Services.CouponAPI.Data;
 using Mango.Services.CouponAPI.Models;
 using Mango.Services.CouponAPI.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
@@ -9,12 +10,15 @@ namespace Mango.Services.CouponAPI.Controllers
     [ApiController]
     public class CouponAPIControler : ControllerBase
     {
+        // using dependancy ingection to add the appcontext, responseDto, autoMapper
         private readonly AppDbContext _db;
         private ResponseDto _response;
-        public CouponAPIControler(AppDbContext db)
+        private IMapper _mapper;
+        public CouponAPIControler(AppDbContext db, IMapper mapper)
         {
             _db = db;
             _response = new ResponseDto();
+            _mapper = mapper;
         }
 
 
@@ -23,7 +27,7 @@ namespace Mango.Services.CouponAPI.Controllers
             try
             {
                 IEnumerable<Coupon> objList = _db.coupons.ToList();
-                _response.Result = objList;
+                _response.Result = _mapper.Map<IEnumerable<CouponDto>>(objList);
             }catch (Exception ex)
             {
                 _response.IsSuccess = false;
@@ -41,13 +45,13 @@ namespace Mango.Services.CouponAPI.Controllers
             {
                 Coupon obj = _db.coupons.First(e => e.CouponId == id);
                 // INSTEAD of returning the Coupon directly from db we rerurn the Dto
-                CouponDto couponDto = new CouponDto(){
-                    CouponId= obj.CouponId,
-                    CouponCode = obj.CouponCode,
-                    DiscountAmount = obj.DiscountAmount,
-                     MinAmount = obj.MinAmount,
-                };
-                _response.Result = couponDto;
+                //CouponDto couponDto = new CouponDto(){
+                //    CouponId= obj.CouponId,
+                //    CouponCode = obj.CouponCode,
+                //    DiscountAmount = obj.DiscountAmount,
+                //     MinAmount = obj.MinAmount,
+                //};
+                _response.Result = _mapper.Map<CouponDto>(obj);
 
             }
             catch (Exception ex)
