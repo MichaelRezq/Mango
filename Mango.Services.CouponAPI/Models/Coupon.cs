@@ -2,7 +2,7 @@
 {
     public class Coupon
     {
-        public string Id { get; set; }  
+        public int CouponId { get; set; }  
         public string CouponCode { get; set; }
 
         public double DiscountAmount { get; set; }
