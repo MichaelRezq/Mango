@@ -1,7 +1,6 @@
 ﻿using Mango.Services.CouponAPI.Data;
 using Mango.Services.CouponAPI.Models;
 using Mango.Services.CouponAPI.Models.DTO;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Mango.Services.CouponAPI.Controllers
@@ -41,7 +40,14 @@ namespace Mango.Services.CouponAPI.Controllers
             try
             {
                 Coupon obj = _db.coupons.First(e => e.CouponId == id);
-                _response.Result = obj;
+                // INSTEAD of returning the Coupon directly from db we rerurn the Dto
+                CouponDto couponDto = new CouponDto(){
+                    CouponId= obj.CouponId,
+                    CouponCode = obj.CouponCode,
+                    DiscountAmount = obj.DiscountAmount,
+                     MinAmount = obj.MinAmount,
+                };
+                _response.Result = couponDto;
 
             }
             catch (Exception ex)
