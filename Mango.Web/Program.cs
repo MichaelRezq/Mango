@@ -13,7 +13,9 @@ builder.Services.AddHttpClient();
 builder.Services.AddHttpClient<ICouponService,CouponService>();
 // to populate the varible in sd to appsetting
 SD.CouponAPIBase = builder.Configuration["ServiceUrls:CouponAPI"];
-
+// register the IBaseService & BaseService
+builder.Services.AddScoped<IBaseService, BaseService>();
+builder.Services.AddScoped<ICouponService, CouponService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
