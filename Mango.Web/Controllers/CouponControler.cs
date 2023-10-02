@@ -10,19 +10,19 @@ namespace Mango.Web.Controllers
     {
 
         private readonly ICouponService _couponService;
-        public CouponControler(ICouponService _couponService)
+        public CouponControler(ICouponService couponService)
         {
-            _couponService = _couponService;
+            _couponService = couponService;
         }
         public async Task<IActionResult> CouponIndex()
         {
             List<CouponDto>? list = new();
             ResponseDto? response = await _couponService.GetAllCouponsAsync();
-            if (response != null && response.IsSuccess==true)
+            if (response != null)
             {
                list = JsonConvert.DeserializeObject<List<CouponDto>>(Convert.ToString(response.Result));
             }
-            return View(response);
+            return View(list);
         }
     }
 }
